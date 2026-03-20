@@ -20,7 +20,7 @@ apply from: 'api-changes.gradle'
 // Root project doesn't need a custom build task - Gradle handles subproject builds automatically
 
 // Task to add a new Minecraft version
-task addMcVersion(type: DefaultTask) {
+tasks.register('addMcVersion', DefaultTask) {
     group = 'build setup'
     description = 'Adds support for a new Minecraft version'
 

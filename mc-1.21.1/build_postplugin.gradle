@@ -1,0 +1,142 @@
+// Apply common dependencies
+apply from: '../dependencies.gradle'
+
+// Function to replace placeholders in export format
+def resolveExportFormat(String format) {
+    return format
+        .replace('{mod-name}', rootProject.mod_id)
+        .replace('{mod-version}', rootProject.version)  // Use root project version for consistency
+        .replace('{mc-version}', project.minecraft_version)
+        .replace('{mc-version-dashed}', project.minecraft_version.replace('.', '-'))
+}
+
+// Override export format for this version (optional)
+def versionExportFormat = project.hasProperty('export_format_override') ?
+    project.export_format_override : rootProject.export_format
+
+// Set version to empty to prevent Gradle from appending it to jar names
+version = ''
+
+base {
+    archivesName = resolveExportFormat(versionExportFormat)
+}
+
+dependencies {
+    // Version-specific dependencies (Fabric core dependencies)
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    // Override or exclude common dependencies here if needed
+    // Example: override a common dependency version
+    // modImplementation('com.example:common-mod') {
+    //     version {
+    //         strictly '2.0.0'
+    //     }
+    // }
+
+    // Example: disable/exclude a common dependency
+    // configurations.modImplementation.exclude group: 'com.example', module: 'unwanted-mod'
+}
+
+// Automatic API replacements based on global changes and current version
+def apiReplacements = [:]
+rootProject.globalApiChanges.each { change ->
+    if (versionGreaterOrEqual(project.minecraft_version, change.minVersion)) {
+        apiReplacements.putAll(change.replacements)
+    }
+}
+
+// Helper function for version comparison
+static def versionGreaterOrEqual(String current, String min) {
+    def currentParts = current.split(/\./).collect { it.toInteger() }
+    def minParts = min.split(/\./).collect { it.toInteger() }
+    for (int i = 0; i < Math.max(currentParts.size(), minParts.size()); i++) {
+        int c = i < currentParts.size() ? currentParts[i] : 0
+        int m = i < minParts.size() ? minParts[i] : 0
+        if (c > m) return true
+        if (c < m) return false
+    }
+    return true
+}
+
+// Temporary directory for processed sources
+def processedSourcesDir = file("$buildDir/processed-sources")
+def processedResourcesDir = file("$buildDir/processed-resources")
+
+// Task to process sources with API replacements
+tasks.register('processSources', Copy) {
+    from '../core/src/main/java'
+    into processedSourcesDir
+
+    // Apply replacements
+    filter { line ->
+        apiReplacements.each { oldStr, newStr ->
+            line = line.replace(oldStr, newStr)
+        }
+        line
+    }
+
+    include '**/*.java'
+}
+
+// Task to copy core resources
+tasks.register('copyCoreResources', Copy) {
+    from '../core/src/main/resources'
+    into processedResourcesDir
+}
+
+// Include processed sources
+sourceSets.main.java.srcDirs = [processedSourcesDir]
+sourceSets.main.resources.srcDirs = [processedResourcesDir]
+
+// Ensure processing happens before compilation
+compileJava.dependsOn processSources, copyCoreResources
+processResources.dependsOn copyCoreResources
+
+processResources {
+    inputs.property "version", rootProject.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": rootProject.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = Integer.parseInt(project.java_version)
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.toVersion(project.java_version)
+    targetCompatibility = JavaVersion.toVersion(project.java_version)
+}
+
+jar {
+    doFirst {
+        println("")
+        println "=========================================================================="
+        println "Building mod using fabric-multi-version-mod-template by shyskyfox aka Lina"
+        println "https://github.com/shyskyfox/fabric-multi-version-mod-template"
+        println "=========================================================================="
+    }
+    from("../../LICENSE") {
+        rename { "${it}_${project.base.archivesName}"}
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        // Publishing repositories
+    }
+}
+
+sourcesJar {
+    dependsOn processSources, copyCoreResources
+}

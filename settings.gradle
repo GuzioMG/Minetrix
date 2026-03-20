@@ -16,4 +16,4 @@ rootProject.name = "fabric-multi-version-mod-template"
 // Include subprojects
 include 'core'
 include 'mc-1.21.1'
-include 'mc-1.21.2'
+include 'mc-1.21.11'
