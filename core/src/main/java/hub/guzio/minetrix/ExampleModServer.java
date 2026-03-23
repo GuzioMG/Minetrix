@@ -6,7 +6,6 @@ package hub.guzio.minetrix;
 import net.fabricmc.api.DedicatedServerModInitializer;
 
 public class ExampleModServer implements DedicatedServerModInitializer {
-
     @Override
     public void onInitializeServer() {
         System.out.println("Server says hello!");

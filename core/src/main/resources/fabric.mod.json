@@ -1,30 +1,35 @@
 {
-  "schemaVersion": 1,
-  "id": "minetrix",
-  "version": "${version}",
-  "name": "Minetrix",
-  "description": "Fully open-source social mod",
-  "authors": [
-    "Guzio",
-    "Lina"
-  ],
-  "contact": {
-    "homepage": "https://guziohub.ovh/",
-    "sources": "https://github.com/GuzioMG/Minetrix"
-  },
-  "license": "MIT",
-  "icon": "assets/multiversiontemplate/icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "hub.guzio.minetrix.ExampleMod"
+    "schemaVersion": 1,
+    "id": "minetrix",
+    "version": "${version}",
+    "name": "Minetrix",
+    "description": "Fully open-source social mod",
+    "authors": [
+        "Guzio",
+        "Lina"
     ],
-    "server": [
-      "hub.guzio.minetrix.ExampleModServer"
-    ],
-    "client": [
-      "hub.guzio.minetrix.ExampleModClient"
+    "contact": {
+        "homepage": "https://guziohub.ovh/",
+        "sources": "https://github.com/GuzioMG/Minetrix"
+    },
+    "license": "MIT",
+    "icon": "assets/multiversiontemplate/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "hub.guzio.minetrix.ExampleMod"
+        ],
+        "server": [
+            "hub.guzio.minetrix.ExampleModServer"
+        ],
+        "client": [
+            "hub.guzio.minetrix.ExampleModClient"
+        ]
+    },
+    "suggests": {},
+    "mixins": [
+        {
+            "config": "minetrix.mixin.json"
+        }
     ]
-  },
-  "suggests": {}
 }
