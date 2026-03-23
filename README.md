@@ -295,8 +295,8 @@ private void registerTimeCommand(CommandDispatcher<ServerCommandSource> dispatch
 ```json
 {
   "entrypoints": {
-    "client": ["com.multiversion.template.ExampleModClient"],
-    "server": ["com.multiversion.template.ExampleMod"]
+    "client": ["hub.guzio.minetrix.ExampleModClient"],
+    "server": ["hub.guzio.minetrix.ExampleMod"]
   }
 }
 ```

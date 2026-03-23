@@ -1,25 +1,30 @@
 {
   "schemaVersion": 1,
-  "id": "multiversiontemplate",
+  "id": "minetrix",
   "version": "${version}",
-  "name": "Multi Version Template Mod",
-  "description": "A simple Mod Template. by shyskyfox aka Lina",
+  "name": "Minetrix",
+  "description": "Fully open-source social mod",
   "authors": [
+    "Guzio",
     "Lina"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://guziohub.ovh/",
+    "sources": "https://github.com/GuzioMG/Minetrix"
   },
   "license": "MIT",
   "icon": "assets/multiversiontemplate/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "hub.guzio.minetrix.ExampleMod"
+    ],
+    "server": [
+      "hub.guzio.minetrix.ExampleModServer"
+    ],
     "client": [
-        "com.multiversion.template.ExampleModClient"
+      "hub.guzio.minetrix.ExampleModClient"
     ]
   },
-  "suggests": {
-    "another-mod": "*"
-  }
+  "suggests": {}
 }
