@@ -49,7 +49,7 @@ rootProject.globalApiChanges.each { change ->
 }
 
 // Helper function for version comparison
-def versionGreaterOrEqual(String current, String min) {
+static def versionGreaterOrEqual(String current, String min) {
     def currentParts = current.split(/\./).collect { it.toInteger() }
     def minParts = min.split(/\./).collect { it.toInteger() }
     for (int i = 0; i < Math.max(currentParts.size(), minParts.size()); i++) {
@@ -66,7 +66,7 @@ def processedSourcesDir = file("$buildDir/processed-sources")
 def processedResourcesDir = file("$buildDir/processed-resources")
 
 // Task to process sources with API replacements
-task processSources(type: Copy) {
+tasks.register('processSources', Copy) {
     from '../core/src/main/java'
     into processedSourcesDir
 
@@ -82,7 +82,7 @@ task processSources(type: Copy) {
 }
 
 // Task to copy core resources
-task copyCoreResources(type: Copy) {
+tasks.register('copyCoreResources', Copy) {
     from '../core/src/main/resources'
     into processedResourcesDir
 }

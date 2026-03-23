@@ -1,7 +1,15 @@
 // Core project contains shared source code
 // It doesn't build a mod jar itself - version-specific projects include its sources
+
+// However, a Gradle configuration must still be present for it, so that your IDE can do autocomplete, error highlighting and similar stuff.
+// By default, it uses Minecraft 1.21.1's libraries for it. If you want to switch to a different version, make sure you added it to your project,
+// and then replace the contents of core/gradle.properties with the contents of mc-[desired version]/gradle.properties.
+
 plugins {
     id 'fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
-apply from: '../mc-1.21.1/build_postplugin.gradle'
+apply from: "../mc-${project.minecraft_version}/build_postplugin.gradle"
+
+sourceSets.main.java.srcDirs = [file("$projectDir/src/main/java")]
+sourceSets.main.resources.srcDirs = [file("$projectDir/src/main/resources")]

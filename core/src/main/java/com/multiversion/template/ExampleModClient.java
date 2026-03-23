@@ -30,6 +30,7 @@ public class ExampleModClient implements ClientModInitializer {
                     context.getSource().sendFeedback(() -> Text.literal("No permission!"), false);
                 }
                 return 1; // 1 signals a successful execution
-            }));
+            })
+        );
     }
 }
