@@ -4,15 +4,15 @@ apply from: '../dependencies.gradle'
 // Function to replace placeholders in export format
 def resolveExportFormat(String format) {
     return format
-            .replace('{mod-name}', rootProject.mod_id)
-            .replace('{mod-version}', rootProject.version)  // Use root project version for consistency
-            .replace('{mc-version}', project.minecraft_version)
-            .replace('{mc-version-dashed}', project.minecraft_version.replace('.', '-'))
+        .replace('{mod-name}', rootProject.mod_id)
+        .replace('{mod-version}', rootProject.version)  // Use root project version for consistency
+        .replace('{mc-version}', project.minecraft_version)
+        .replace('{mc-version-dashed}', project.minecraft_version.replace('.', '-'))
 }
 
 // Override export format for this version (optional)
 def versionExportFormat = project.hasProperty('export_format_override') ?
-        project.export_format_override : rootProject.export_format
+    project.export_format_override : rootProject.export_format
 
 // Set version to empty to prevent Gradle from appending it to jar names
 version = ''

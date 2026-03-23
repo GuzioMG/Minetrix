@@ -50,9 +50,12 @@ tasks.register('addMcVersion', DefaultTask) {
         folder.mkdirs()
 
         // Copy build.gradle template
-        def templateBuildGradle = new File(project.rootDir, 'mc-1.21.1/build.gradle')
+        def templateBuildGradle = new File(project.rootDir, 'gradle/templates/build.gradle')
+        def templateBuildPostpluginGradle = new File(project.rootDir, 'gradle/templates/build_postplugin.gradle')
         def newBuildGradle = new File(folder, 'build.gradle')
+        def newBuildPostpluginGradle = new File(folder, 'build_postplugin.gradle')
         newBuildGradle.text = templateBuildGradle.text
+        newBuildPostpluginGradle.text = templateBuildPostpluginGradle.text
 
         // Create gradle.properties
         def newProperties = new File(folder, 'gradle.properties')
