@@ -81,10 +81,26 @@ tasks.register('processSources', Copy) {
     include '**/*.java'
 }
 
+// Task to apply source overrides
+tasks.register('applySrcOverrides', Copy) {
+    from 'overrides/java'
+    into processedSourcesDir
+
+    dependsOn processSources
+}
+
 // Task to copy core resources
 tasks.register('copyCoreResources', Copy) {
     from '../core/src/main/resources'
     into processedResourcesDir
+}
+
+// Task to apply resource overrides
+tasks.register('applyResOverrides', Copy) {
+    from 'overrides/resources'
+    into processedResourcesDir
+
+    dependsOn copyCoreResources
 }
 
 // Include processed sources
@@ -92,8 +108,8 @@ sourceSets.main.java.srcDirs = [processedSourcesDir]
 sourceSets.main.resources.srcDirs = [processedResourcesDir]
 
 // Ensure processing happens before compilation
-compileJava.dependsOn processSources, copyCoreResources
-processResources.dependsOn copyCoreResources
+compileJava.dependsOn applySrcOverrides, applyResOverrides
+processResources.dependsOn applyResOverrides
 
 processResources {
     inputs.property "version", rootProject.version
