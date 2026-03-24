@@ -6,7 +6,10 @@
     "client": [
         "TitleScreen"
     ],
-    "mixins": [],
+    "mixins": [
+        "StructureGen",
+        "StructureManagerLevelAccessor"
+    ],
     "injectors": {
         "defaultRequire": 1
     }
